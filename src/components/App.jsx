@@ -3,6 +3,9 @@ import { Phonebook } from './Phonebook/Phonebook';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
+import { func } from 'prop-types';
+
+const STORAGE_KEY = 'contacts-data';
 
 
 export class App extends Component {
@@ -15,6 +18,17 @@ export class App extends Component {
     ],
     filter: ''
   };
+
+  componentDidMount() {
+    const localStorageData = localStorage.getItem(STORAGE_KEY);
+    const parsedData = JSON.parse(localStorageData);
+    const { contacts } = this.state
+    if (!parsedData) {
+      return
+    }
+    this.setState({ contacts: parsedData })
+  }
+
 
   handleAddContacts = e => {
     e.preventDefault();
@@ -37,16 +51,20 @@ export class App extends Component {
     });
 
   };
-
-  changeFilter = e => {
-    this.setState({ filter: e.target.value });
-  };
-
+  
   handleDeleteContact = e => {
     const { contacts } = this.state;
     const filteredNewArray = contacts.filter(({ id }) => id !== e.target.value);
     this.setState({contacts: filteredNewArray})
     
+  }
+
+  changeFilter = e => {
+    this.setState({ filter: e.target.value });
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state.contacts))
   }
 
   render() {
