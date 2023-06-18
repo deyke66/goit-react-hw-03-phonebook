@@ -3,7 +3,6 @@ import { Phonebook } from './Phonebook/Phonebook';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
-import { func } from 'prop-types';
 
 const STORAGE_KEY = 'contacts-data';
 
@@ -22,7 +21,6 @@ export class App extends Component {
   componentDidMount() {
     const localStorageData = localStorage.getItem(STORAGE_KEY);
     const parsedData = JSON.parse(localStorageData);
-    const { contacts } = this.state
     if (!parsedData) {
       return
     }
